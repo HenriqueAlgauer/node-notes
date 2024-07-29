@@ -1,4 +1,3 @@
-const { response } = require("express");
 const knex = require("../database/knex");
 
 class NotesController {
@@ -12,7 +11,7 @@ class NotesController {
       user_id,
     });
 
-    const linksInsert = links.map(link => {
+    const linksInsert = links.map((link) => {
       return {
         note_id,
         url: link,
@@ -21,7 +20,7 @@ class NotesController {
 
     await knex("links").insert(linksInsert);
 
-    const tagsInsert = tags.map(name => {
+    const tagsInsert = tags.map((name) => {
       return {
         note_id,
         name,
