@@ -5,32 +5,50 @@ class NotesController {
     const { title, description, tags, links } = request.body;
     const { user_id } = request.params;
 
-    const note_id = await knex("notes").insert({
-      title,
-      description,
-      user_id,
-    });
+    // Use transações para garantir que todas as inserções sejam feitas corretamente
+    const trx = await knex.transaction();
 
-    const linksInsert = links.map((link) => {
-      return {
+    try {
+      // Insere a nota e obtém o ID gerado
+      const [insertedNote] = await trx("notes").insert({
+        title,
+        description,
+        user_id,
+      }).returning('id'); // Garante que o id seja retornado
+
+      const note_id = insertedNote.id; // Extrai o ID do objeto retornado
+
+      // Prepara a inserção dos links
+      const linksInsert = links.map(link => ({
         note_id,
         url: link,
-      };
-    });
+      }));
 
-    await knex("links").insert(linksInsert);
 
-    const tagsInsert = tags.map((name) => {
-      return {
+      // Insere os links
+      await trx("links").insert(linksInsert);
+
+      // Prepara a inserção das tags
+      const tagsInsert = tags.map(name => ({
         note_id,
         name,
         user_id,
-      };
-    });
+      }));
 
-    await knex("tags").insert(tagsInsert);
+      // Insere as tags
+      await trx("tags").insert(tagsInsert);
 
-    response.json();
+      // Confirma a transação
+      await trx.commit();
+
+      // Retorna a resposta com sucesso
+      response.status(201).json({message:"Deu certo :)"});
+    } catch (error) {
+      // Em caso de erro, desfaz a transação
+      await trx.rollback();
+      console.error("Error creating note:", error); // Log do erro
+      response.status(500).json({ error: 'Error creating note' });
+    }
   }
 }
 
