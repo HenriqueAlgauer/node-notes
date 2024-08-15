@@ -23,3 +23,5 @@ function ensureAuth(request, response, next) {
     throw new AppError("JWT Token inválido", 401);
   }
 }
+
+module.exports = ensureAuth;
