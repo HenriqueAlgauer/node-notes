@@ -3,7 +3,7 @@ const multer = require("multer");
 const crypto = require("crypto");
 
 const tmpFolder = path.resolve(__dirname, "..", "..", "tmp");
-const uploadFolder = paht.resolve(__dirname, "uploads");
+const uploadFolder = path.resolve(__dirname, "uploads");
 
 const MULTER = {
   storage: multer.diskStorage({
