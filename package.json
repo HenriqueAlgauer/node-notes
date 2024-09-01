@@ -5,7 +5,8 @@
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "dev": "nodemon ./src/server.js",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex migrate:latest",
+    "vercel-build": "npm knex migrate:latest"
   },
   "keywords": [],
   "author": "",
