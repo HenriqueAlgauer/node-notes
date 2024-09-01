@@ -7,6 +7,6 @@ const tagsRoutes = Router();
 
 const tagsController = new TagsController();
 
-tagsRoutes.get("/:user_id", ensureAuth, tagsController.index);
+tagsRoutes.get("/", ensureAuth, tagsController.index);
 
 module.exports = tagsRoutes;
