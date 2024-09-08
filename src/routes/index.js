@@ -7,6 +7,10 @@ const sessionsRoutes = require("./sessions.routes");
 
 const routes = Router();
 
+routes.get("/", (req, res) => {
+    res.send("Welcome to the API!");
+});
+
 routes.use("/users", usersRoutes);
 routes.use("/sessions", sessionsRoutes);
 routes.use("/notes", notesRoutes);
